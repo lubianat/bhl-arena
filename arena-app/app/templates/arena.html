@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arena</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            background-color: #007bff;
+            padding: 0.5rem 1rem;
+        }
+
+        nav ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        nav li {
+            display: inline;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .file-block {
+            flex: 1 1 300px;
+            border: 1px solid #ccc;
+            margin: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .file-block h2 {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .file-block img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .file-block button {
+            margin-top: 0.5rem;
+            padding: 0.6rem 1rem;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .file-block button:hover {
+            background-color: #00408a;
+        }
+
+        .file-block .external-link {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #0056b3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .file-block .external-link svg {
+            margin-left: 0.3rem;
+        }
+
+        .data-statements {
+            margin-top: 1rem;
+            text-align: left;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 2px solid white;
+            border-radius: 8px;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Arena</a></li>
+            <li><a href="/rank">Ranking</a></li>
+        </ul>
+    </nav>
+
+    <h1 class="heading">Pick your favourite</h1>
+
+    <div class="container">
+
+        {% for file, data in [(file1, data1), (file2, data2)] %}
+        <div class="file-block">
+
+            <button style="margin-bottom: 1rem;"
+                onclick="submitChoice({{ file.id }}, {{ file2.id if loop.index == 1 else file1.id }})">
+                Choose
+            </button>
+
+            <img src="https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/{{ file.name }}"
+                alt="{{ file.name }}" onclick="showPopup(this.src)" />
+            <a class="external-link" href="https://commons.wikimedia.org/wiki/File:{{ file.name }}" target="_blank">
+                View on Commons
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                    <path fill="currentColor" d="M14 3v2h4.59L10 13.59l1.41 1.41L20 6.41V11h2V3h-8z"></path>
+                    <path fill="currentColor"
+                        d="M19 19H5V5h6V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-6h-2v6z"></path>
+                </svg>
+            </a>
+            <div class="data-statements">
+
+                <strong>Data Statements:</strong>
+
+                <ul>
+                    {% if 'P180' not in data %}
+                    <li>No depicts statement found. <a class="external-link"
+                            href="https://commons.wikimedia.org/wiki/File:{{ file.name }}" target="_blank">
+                            Add some
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="currentColor" d="M14 3v2h4.59L10 13.59l1.41 1.41L20 6.41V11h2V3h-8z"></path>
+                                <path fill="currentColor"
+                                    d="M19 19H5V5h6V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-6h-2v6z">
+                                </path>
+                            </svg> </a></li>
+                    {% endif %}
+                    {% for key, value in data.items() %}
+                    {% if key == 'P180' %}
+                    <li><strong>{{ key }}:</strong>
+                        <ul>
+                            {% for item in value %}
+                            <a href="https://www.wikidata.org/wiki/{{ item.id }}" target="_blank">
+                                <li class="wikidata-item" data-id="{{ item.id }}">{{ item.id }}</li>
+                            </a>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            <p><strong>Elo Rating:</strong> {{ file.elo | round }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+
+    <div class="popup" id="imagePopup">
+        <button class="popup-close" onclick="hidePopup()">×</button>
+        <img src="" alt="Image Preview" />
+    </div>
+
+    <script>
+        function submitChoice(winner, loser) {
+            fetch('/submit_choice', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ winner, loser })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Error submitting choice.');
+                });
+        }
+
+        function showPopup(src) {
+            const popup = document.getElementById('imagePopup');
+            popup.style.display = 'flex';
+            popup.querySelector('img').src = src;
+        }
+
+        function hidePopup() {
+            const popup = document.getElementById('imagePopup');
+            popup.style.display = 'none';
+            popup.querySelector('img').src = '';
+        }
+        // Close popup on "Esc" key press
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                hidePopup();
+            }
+        });
+
+        async function fetchWikidataLabels() {
+            // Select all elements with the class 'wikidata-item'
+            const items = document.querySelectorAll('.wikidata-item');
+
+            // Collect all IDs
+            const ids = Array.from(items).map(item => item.getAttribute('data-id'));
+
+            // Fetch labels for these IDs from Wikidata API
+            if (ids.length > 0) {
+                const url = `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${ids.join('|')}&format=json&languages=en&props=labels&origin=*`;
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+
+                    // Replace IDs with labels
+                    items.forEach(item => {
+                        const id = item.getAttribute('data-id');
+                        const label = data.entities[id]?.labels?.en?.value || id; // Fallback to ID if no label found
+                        item.textContent = label;
+                    });
+                } catch (error) {
+                    console.error('Error fetching labels from Wikidata:', error);
+                }
+            }
+        }
+
+        // Run the function after the page loads
+        window.onload = fetchWikidataLabels;
+    </script>
+
+</body>
+
+</html>
