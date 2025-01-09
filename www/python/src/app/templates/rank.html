@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <!-- Ensures responsiveness on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ranking</title>
+
+    <!-- DataTables CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navbar (same style as arena.html for consistency) */
+        nav {
+            background-color: #007bff;
+            padding: 0.5rem 1rem;
+        }
+
+        nav ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        nav li {
+            display: inline;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Ranking table container */
+        .ranking-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        /* Make images nicely scaled in a table cell */
+        .table-img {
+            max-width: 100px;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="/">Arena</a></li>
+            <li><a href="/rank">Ranking</a></li>
+        </ul>
+    </nav>
+
+    <div class="ranking-container">
+        <h1>File Ranking (Wins - Losses)</h1>
+        <!-- DataTables table -->
+        <table id="rankingTable" class="display">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Image</th>
+                    <th>File Name</th>
+                    <th>Elo Rating</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        <img class="table-img"
+                            src="https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/{{ file.name }}"
+                            alt="{{ file.name }}" loading="lazy" />
+                    </td>
+                    <td>{{ file.name }}</td>
+                    <td>{{ file.elo | round }}</td>
+                    <td>{{ file.wins }}</td>
+                    <td>{{ file.losses }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- jQuery (required by DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- DataTables JS (CDN) -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#rankingTable').DataTable({
+                "pageLength": 5  // show 5 rows per page by default
+            });
+        });
+    </script>
+</body>
+
+</html>
