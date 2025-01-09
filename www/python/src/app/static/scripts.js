@@ -53,5 +53,3 @@ async function fetchWikidataLabels() {
         }
     }
 }
-
-window.onload = fetchWikidataLabels;

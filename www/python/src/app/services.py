@@ -3,7 +3,6 @@ from .models import File
 from . import db
 from sqlalchemy.sql import func  # Import func for SQLAlchemy functions
 import random
-from bs4 import BeautifulSoup
 
 WIKIMEDIA_API = "https://commons.wikimedia.org/w/api.php"
 
