@@ -54,7 +54,8 @@
                                 src="https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/{{ file.name }}"
                                 alt="{{ file.name }}" loading="lazy" style="max-width: 100px;" />
                         </td>
-                        <td>{{ file.name }}</td>
+                        <td><a href="https://commons.wikimedia.org/wiki/File:{{ file.name }}" target="_blank">
+                                {{ file.name }}</a></td>
                         <td>{{ file.elo | round }}</td>
                         <td>{{ file.wins }}</td>
                         <td>{{ file.losses }}</td>
